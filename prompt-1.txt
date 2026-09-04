@@ -1,0 +1,1871 @@
+# KNOW HOW — FINAL UI/UX & DEVELOPMENT PROMPT
+
+## ROLE
+
+Act as a **Senior Full-Stack Software Developer, Frontend Architect, UI/UX Designer, Document Rendering Engineer, and Enterprise Application Architect**.
+
+You have strong experience in:
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Framer Motion
+- Python
+- FastAPI
+- DOCX parsing and rendering
+- Excel parsing
+- Document comparison
+- Enterprise UI/UX
+- AI chatbot architecture
+- Knowledge management systems
+- Automotive cybersecurity applications
+
+You are developing an enterprise application called:
+
+# KNOW HOW
+
+---
+
+# 1. CORE PURPOSE
+
+KNOW HOW is an **Automotive Cybersecurity Document Knowledge and Guidance Platform**.
+
+The application helps cybersecurity engineers understand:
+
+- What each document section contains
+- What needs to be updated
+- What information is required
+- Who owns the activity
+- What checklist should be followed
+- What the latest reference input looks like
+- How to understand unfamiliar sections
+- How to ask questions about any cybersecurity document
+
+The application uses three primary sources:
+
+```text
+Template DOCX
+      ↓
+Main Document UI
+
+knowledge.xlsx
+      ↓
+Section Guidance / Update Information
+
+Reference-image/
+      ↓
+Visual Reference Input
+```
+
+The future AI assistant will provide additional cybersecurity guidance.
+
+---
+
+# 2. INPUT FILES
+
+The application has the following input files/folders.
+
+## FILE 1 — TEMPLATE DOCUMENT
+
+Example:
+
+```text
+Cyber Security Plan Template.docx
+```
+
+This is the **authoritative source for the main document UI**.
+
+The complete document must be rendered from the first page.
+
+Do NOT start rendering from a particular section.
+
+The UI must start exactly from the beginning of the document.
+
+---
+
+## FILE 2 — KNOWLEDGE EXCEL
+
+Example:
+
+```text
+knowledge.xlsx
+```
+
+This provides section-specific knowledge, updates, objectives, owners, checklists, etc.
+
+The application must dynamically read this file.
+
+Do NOT hardcode the section content.
+
+---
+
+## FILE 3 — REFERENCE IMAGE FOLDER
+
+Example:
+
+```text
+Reference-image/
+```
+
+This folder contains reference images.
+
+Each image corresponds to a document section.
+
+Example:
+
+```text
+Reference-image/
+│
+├── Project Name.png
+├── Document Information.png
+├── Revision History.png
+├── Purpose.png
+├── Scope.png
+├── Audience.png
+├── Related Documents.png
+├── Cybersecurity Objective.png
+├── Development Life Cycle.png
+└── ...
+```
+
+The filename should be mapped to the corresponding section name.
+
+IMPORTANT:
+
+**Do NOT use the previous Reference Cybersecurity Plan.docx.**
+
+The reference DOCX is no longer part of the workflow.
+
+Only use:
+
+```text
+Reference-image/
+```
+
+for reference input images.
+
+---
+
+# 3. HIGH-LEVEL UI STRUCTURE
+
+Maintain the existing three-panel structure.
+
+```text
+┌────────────────────────────────────────────────────────────────────────────┐
+│                              KNOW HOW                                      │
+│                  Automotive Cybersecurity Knowledge Platform                │
+├──────────────────────┬───────────────────────────────────┬─────────────────┤
+│                      │                                   │                 │
+│  DOCUMENT &          │         MAIN DOCUMENT             │   AI ASSISTANT  │
+│  SECTION NAVIGATION  │                                   │                 │
+│                      │                                   │                 │
+│  Documents           │      Template Document            │   AI Chat       │
+│  ─────────────       │                                   │                 │
+│  Cybersecurity       │      Section Containers            │                 │
+│  Documents           │                                   │                 │
+│                      │                                   │                 │
+│  Sections            │                                   │                 │
+│  ─────────────       │                                   │                 │
+│  Important Notes     │                                   │                 │
+│  Project Name        │                                   │                 │
+│  Document Information│                                   │                 │
+│  Revision History    │                                   │                 │
+│  Purpose             │                                   │                 │
+│  Scope               │                                   │                 │
+│  Audience            │                                   │                 │
+│  Related Documents   │                                   │                 │
+│  ...                 │                                   │                 │
+└──────────────────────┴───────────────────────────────────┴─────────────────┘
+```
+
+### IMPORTANT
+
+The AI assistant is on the **RIGHT side**.
+
+The three areas are:
+
+```text
+LEFT   = Document + Section Navigation
+CENTER = Main Document
+RIGHT  = AI Assistant
+```
+
+---
+
+# 4. LEFT PANEL — DOCUMENT NAVIGATION
+
+The left panel contains document categories and documents.
+
+Example:
+
+```text
+CYBERSECURITY DOCUMENTS
+
+▾ Cybersecurity Documents
+
+   Cybersecurity Plan
+   Cybersecurity Case
+   Cybersecurity Interface Agreement
+```
+
+The document list must be configurable.
+
+For this implementation:
+
+```text
+Cybersecurity Plan
+```
+
+is the active document.
+
+Other documents should be architecturally supported but can display:
+
+```text
+Coming Soon
+```
+
+until their templates are added.
+
+---
+
+# 5. SECTION NAVIGATION — IMPORTANT UPDATE
+
+When the user selects:
+
+```text
+Cybersecurity Plan
+```
+
+the left panel must display **ALL sections starting from the first page of the DOCX**.
+
+Do NOT skip the front matter.
+
+Do NOT start from the first cybersecurity technical section.
+
+The navigation must represent the complete document.
+
+Example:
+
+```text
+CYBERSECURITY PLAN
+
+○ Important Notes
+
+○ Project Name
+
+○ Document Information
+
+○ Revision History
+
+○ Purpose
+
+○ Scope
+
+○ Audience
+
+○ Related Documents
+
+○ Cybersecurity Objective
+
+○ Cybersecurity Management Scope
+
+○ Development Life Cycle
+
+○ Cybersecurity Activity Plan
+
+○ ...
+```
+
+The exact section names must be extracted from the template DOCX.
+
+Do not hardcode these names.
+
+---
+
+# 6. IMPORTANT NOTES — SPECIAL SECTION
+
+**Important Notes must always appear as the first navigation item.**
+
+It appears before the actual template document starts.
+
+Example:
+
+```text
+○ Important Notes
+────────────────────
+○ Project Name
+○ Document Information
+○ Revision History
+○ Purpose
+○ Scope
+...
+```
+
+Important Notes is NOT necessarily a section inside the DOCX.
+
+It is a KNOW HOW system-level guidance section.
+
+---
+
+# 7. IMPORTANT NOTES SOURCE
+
+Important Notes content comes from:
+
+```text
+knowledge.xlsx
+```
+
+specifically from the **first five rows** according to the actual Excel structure.
+
+Do not assume the first five rows are normal cybersecurity sections.
+
+Treat them as Important Notes data.
+
+When the user selects:
+
+```text
+Important Notes
+```
+
+the center area must display the Important Notes content.
+
+---
+
+# 8. IMPORTANT NOTES TYPING ANIMATION
+
+Important Notes must appear using a professional typewriter animation.
+
+The text should appear one character at a time, similar to text being typed in a coding terminal.
+
+Add a subtle blinking cursor.
+
+Do NOT make the animation excessively slow.
+
+Allow the user to skip the animation or immediately display the complete content if appropriate.
+
+---
+
+# 9. MAIN DOCUMENT — FIRST PAGE REQUIREMENT
+
+The center document UI must begin from **Page 1 of the Template DOCX**.
+
+The first visible content should correspond to the actual beginning of:
+
+```text
+Cyber Security Plan Template.docx
+```
+
+For example:
+
+```text
+────────────────────────────────────
+             PROJECT NAME
+────────────────────────────────────
+```
+
+followed by:
+
+```text
+Document Information
+Revision History
+Purpose
+Scope
+Audience
+Related Documents
+...
+```
+
+Do NOT jump directly to:
+
+```text
+Cybersecurity Objective
+```
+
+---
+
+# 10. DOCUMENT FIDELITY
+
+The center UI must reproduce the template DOCX as accurately as technically possible.
+
+Preserve:
+
+### Text
+
+- Exact text
+- Capitalization
+- Paragraphs
+- Line breaks
+
+### Typography
+
+- Font family
+- Font size
+- Bold
+- Italic
+- Underline
+- Font weight
+- Text color
+
+### Layout
+
+- Margins
+- Indentation
+- Alignment
+- Paragraph spacing
+- Line spacing
+
+### Tables
+
+- Table dimensions
+- Number of rows
+- Number of columns
+- Column widths
+- Row heights
+- Cell borders
+- Merged cells
+- Cell alignment
+- Cell background
+- Cell text
+- Font formatting
+- Nested content
+
+### Other elements
+
+- Images
+- Headers
+- Footers
+- Page breaks
+- Numbering
+- Bullet lists
+
+The document should visually resemble the original DOCX.
+
+---
+
+# 11. DO NOT CREATE A GENERIC DASHBOARD
+
+Do NOT transform the document into generic cards.
+
+The center area should remain a **document-like representation**.
+
+Preserve the original structure, formatting, tables, headings, paragraphs, and visual hierarchy.
+
+---
+
+# 12. ONE SECTION = ONE LOGICAL CONTAINER
+
+Each document section should be represented as one logical UI container.
+
+The section container must include:
+
+- Section heading
+- Sub-headings
+- Paragraphs
+- Lists
+- Tables
+- Table contents
+- Images
+- Other document elements
+
+Do NOT remove document elements merely to simplify the UI.
+
+---
+
+# 13. SECTION HEADING
+
+Every section must visibly start with its section heading.
+
+Example:
+
+```text
+CYBERSECURITY OBJECTIVE
+```
+
+The heading must:
+
+- Be clearly visible
+- Use appropriate font weight
+- Match the template formatting where possible
+- Have correct spacing
+- Clearly separate the section from the previous section
+
+Do NOT display section content without the heading.
+
+---
+
+# 14. SECTION CLICK BEHAVIOR
+
+When the user clicks a section in the left navigation:
+
+Example:
+
+```text
+Cybersecurity Objective
+```
+
+perform the following:
+
+### Step 1
+
+Scroll/navigate the main document to:
+
+```text
+Cybersecurity Objective
+```
+
+### Step 2
+
+Highlight the selected section in the center document.
+
+### Step 3
+
+Search `knowledge.xlsx`.
+
+### Step 4
+
+Search the `Reference-image/` folder.
+
+### Step 5
+
+Open the appropriate information UI.
+
+---
+
+# 15. SECTION INFORMATION POPUP
+
+When a section is selected, open a small scrollable popup.
+
+The popup must contain information from:
+
+```text
+knowledge.xlsx
+```
+
+for the selected section.
+
+The popup should display:
+
+- Objective
+- Owner
+- Checklist
+
+Do NOT display:
+
+- Evidence Required
+
+unless specifically enabled in a future requirement.
+
+The popup must be independently scrollable.
+
+---
+
+# 16. POPUP DATA SOURCE
+
+For a selected section:
+
+```text
+selectedSection
+       ↓
+knowledge.xlsx
+       ↓
+find matching section
+       ↓
+retrieve corresponding row
+```
+
+The section name is normally located in:
+
+```text
+Column A
+```
+
+Use the corresponding row for the selected section.
+
+---
+
+# 17. KNOWLEDGE.XLSX CONTENT
+
+The application must support columns such as:
+
+```text
+Section
+Objective
+Evidence Required
+Owner
+Checklist
+```
+
+The popup should currently display:
+
+```text
+Objective
+Owner
+Checklist
+```
+
+Keep Evidence Required in the internal data model even though it is not currently displayed.
+
+Do NOT hardcode the Excel content.
+
+---
+
+# 18. SECTION NOT FOUND IN KNOWLEDGE.XLSX
+
+If the selected section does not exist in `knowledge.xlsx`:
+
+The popup must display exactly:
+
+```text
+No major update, please follow the reference input image.
+```
+
+---
+
+# 19. REFERENCE IMAGE EXPAND CONTAINER
+
+When a section is selected, open a separate expandable reference container below the selected section in the main document area.
+
+The reference container must be:
+
+- Expandable
+- Scrollable
+- Independently closable
+- Clearly labelled
+- Visually separated from official template content
+
+---
+
+# 20. REFERENCE IMAGE QUALITY
+
+This is a critical requirement.
+
+**Do NOT reduce the reference image to fit the container.**
+
+The image must remain highly readable.
+
+Use:
+
+```text
+Natural image resolution
++
+Scrollable viewport
+```
+
+rather than fitting the image into a small container.
+
+If the image is larger than the viewport:
+
+- Allow horizontal scrolling
+- Allow vertical scrolling
+- Maintain image clarity
+- Preserve aspect ratio
+- Do not distort the image
+
+The user must be able to inspect the image in detail.
+
+Provide optional:
+
+```text
+Zoom +
+Zoom -
+Reset
+```
+
+if useful.
+
+---
+
+# 21. REFERENCE IMAGE MAPPING
+
+When section:
+
+```text
+Cybersecurity Objective
+```
+
+is selected, search:
+
+```text
+Reference-image/
+```
+
+for a corresponding image.
+
+Possible matching:
+
+```text
+Cybersecurity Objective.png
+Cybersecurity Objective.jpg
+Cybersecurity Objective.jpeg
+Cybersecurity Objective.webp
+```
+
+Implement normalized filename matching.
+
+Handle:
+
+- Case differences
+- Extra spaces
+- Supported image extensions
+
+Do not modify the displayed section name.
+
+---
+
+# 22. SECTION NOT FOUND IN BOTH SOURCES
+
+If:
+
+```text
+Section not found in knowledge.xlsx
+```
+
+AND:
+
+```text
+Reference image not found
+```
+
+then:
+
+### Popup
+
+Show:
+
+```text
+No major update.
+```
+
+### Reference container
+
+Show:
+
+```text
+Reference input not available for this section.
+```
+
+Do NOT show a broken image.
+
+Do NOT show an empty white container.
+
+---
+
+# 23. KNOWLEDGE EXISTS BUT REFERENCE IMAGE DOES NOT
+
+If a section has information in:
+
+```text
+knowledge.xlsx
+```
+
+but there is no image in:
+
+```text
+Reference-image/
+```
+
+then:
+
+### Popup
+
+Show the available Excel content.
+
+### Reference container
+
+Show:
+
+```text
+There is no update in this section,
+so reference input is not available.
+```
+
+Do NOT hide the popup.
+
+Do NOT hide the reference container.
+
+---
+
+# 24. REFERENCE IMAGE EXISTS BUT KNOWLEDGE DOES NOT
+
+If:
+
+```text
+knowledge.xlsx
+```
+
+does not contain the selected section,
+
+but:
+
+```text
+Reference-image/
+```
+
+contains the image:
+
+### Popup
+
+Show:
+
+```text
+No major update, please follow the reference input image.
+```
+
+### Reference container
+
+Display the reference image.
+
+---
+
+# 25. BOTH SOURCES EXIST
+
+If both sources contain the section:
+
+```text
+knowledge.xlsx
++
+Reference-image/
+```
+
+show:
+
+### Popup
+
+Excel guidance.
+
+### Reference container
+
+Reference image.
+
+This is the normal complete workflow.
+
+---
+
+# 26. SOURCE AVAILABILITY MATRIX
+
+Implement this exact logic:
+
+| knowledge.xlsx | Reference Image | Popup | Reference Container |
+|---|---|---|---|
+| YES | YES | Show Excel content | Show image |
+| YES | NO | Show Excel content | Show "Reference input not available" |
+| NO | YES | Show "No major update, please follow the reference input image." | Show image |
+| NO | NO | Show "No major update." | Show "Reference input not available" |
+
+This logic must be implemented centrally in the application.
+
+---
+
+# 27. SECTION TOGGLE BEHAVIOR
+
+If the user clicks the currently selected section again:
+
+```text
+Selected section
+      ↓
+Click again
+      ↓
+Close popup
++
+Close reference container
+```
+
+If the user selects another section:
+
+```text
+Section A open
+      ↓
+Click Section B
+      ↓
+Section A information closes
+      ↓
+Section B information opens
+```
+
+Only one section's popup/reference expansion should normally be active at a time.
+
+---
+
+# 28. SEPARATE CLOSE BUTTONS
+
+The popup and reference container must have independent close buttons.
+
+### Popup
+
+Clicking the popup close button:
+
+```text
+Close popup only
+```
+
+The reference container remains open.
+
+### Reference container
+
+Clicking the reference close button:
+
+```text
+Close reference container only
+```
+
+The popup remains open.
+
+Clicking the selected section again closes both.
+
+---
+
+# 29. MAIN DOCUMENT SCROLLING
+
+When a section is selected:
+
+```text
+Left navigation
+      ↓
+Selected section
+      ↓
+Center document
+      ↓
+Smooth scroll to section
+```
+
+Use smooth scrolling.
+
+The selected section should receive a subtle visual highlight.
+
+Do not permanently change the original document appearance.
+
+---
+
+# 30. SECTION NAVIGATION STATUS
+
+Do NOT add unnecessary "start" icons at the end of each section.
+
+The left navigation should remain clean.
+
+Use only appropriate status indicators such as:
+
+```text
+○ Section
+```
+
+or:
+
+```text
+● Selected
+```
+
+Do NOT place decorative start/play icons after every section name.
+
+---
+
+# 31. AI CHATBOT — GLOBAL ASSISTANT
+
+The AI chatbot is NOT restricted to the selected section.
+
+The user can ask questions about:
+
+- Any section
+- Any part of the Cybersecurity Plan
+- Any supported document
+- Document relationships
+- knowledge.xlsx information
+- Reference information
+- Future cybersecurity documents
+
+For example, the user may currently view:
+
+```text
+Cybersecurity Objective
+```
+
+but ask:
+
+> What should I update in the Revision History section?
+
+The future AI must understand that the question is about Revision History and not incorrectly limit its context to Cybersecurity Objective.
+
+---
+
+# 32. AI CHATBOT STATUS
+
+Actual AI/Llama integration is NOT required in this version.
+
+Instead display:
+
+```text
+KNOW HOW AI
+
+AI Assistant
+
+━━━━━━━━━━━━━━━━━━
+
+AI assistance is currently
+under development.
+
+This feature will be enabled soon.
+
+━━━━━━━━━━━━━━━━━━
+
+Coming Soon
+```
+
+The chatbot UI should look functional but clearly indicate:
+
+```text
+AI Integration In Progress
+```
+
+Do NOT pretend that AI is already responding.
+
+---
+
+# 33. FUTURE AI ARCHITECTURE
+
+Create an abstraction for future Llama integration.
+
+Frontend:
+
+```text
+AIChatPanel
+      ↓
+AIService
+      ↓
+/api/ai/chat
+      ↓
+Future Llama
+```
+
+The AI should eventually be capable of receiving context such as:
+
+```json
+{
+  "document": "Cybersecurity Plan",
+  "question": "What should I update in revision history?",
+  "selectedSection": "Cybersecurity Objective",
+  "documentContext": "...",
+  "knowledgeContext": "...",
+  "referenceContext": "..."
+}
+```
+
+The AI must be able to search the entire document context rather than being limited to the selected section.
+
+---
+
+# 34. DOCUMENT SWITCHING
+
+The architecture must support multiple documents.
+
+Example:
+
+```text
+Cybersecurity Documents
+
+├── Cybersecurity Plan
+├── Cybersecurity Case
+└── Cybersecurity Interface Agreement
+```
+
+Each document can have its own:
+
+```text
+Template DOCX
+knowledge.xlsx
+Reference-image/
+```
+
+Example:
+
+```text
+documents/
+│
+├── cybersecurity-plan/
+│   ├── template.docx
+│   ├── knowledge.xlsx
+│   └── Reference-image/
+│
+├── cybersecurity-case/
+│   ├── template.docx
+│   ├── knowledge.xlsx
+│   └── Reference-image/
+│
+└── interface-agreement/
+    ├── template.docx
+    ├── knowledge.xlsx
+    └── Reference-image/
+```
+
+Do not build the architecture specifically for only one document.
+
+---
+
+# 35. PROFESSIONAL UI DESIGN
+
+The final application must feel like a:
+
+> **Premium enterprise Automotive Cybersecurity Engineering Platform**
+
+Visual direction:
+
+- Futuristic
+- Professional
+- Sophisticated
+- Technical
+- Clean
+- High-end enterprise software
+
+Use subtle futuristic elements:
+
+- Glass panels
+- Fine borders
+- Soft glow
+- Subtle gradients
+- Smooth transitions
+- Professional typography
+- Minimal animated background
+
+Avoid:
+
+- Hacker movie aesthetics
+- Excessive neon
+- Gaming UI
+- Excessive particle effects
+- Excessive animations
+- Flashing elements
+- Overly bright colors
+
+The UI must be appropriate for presentation to:
+
+- OEMs
+- Tier-1 suppliers
+- Cybersecurity managers
+- Cybersecurity architects
+- Engineering teams
+- Management
+
+---
+
+# 36. MAIN SCREEN VISUAL HIERARCHY
+
+The center document should always remain the primary visual focus.
+
+Priority:
+
+```text
+1. Document
+2. Section navigation
+3. Section guidance
+4. Reference image
+5. AI assistant
+```
+
+Do not allow the AI panel or popup to visually dominate the document.
+
+---
+
+# 37. RESPONSIVE DESIGN
+
+Desktop:
+
+```text
+20% Left
+60% Center
+20% Right
+```
+
+Center should receive the largest space.
+
+Tablet:
+
+```text
+Navigation
+     ↓
+Document
+     ↓
+AI
+```
+
+Mobile:
+
+```text
+☰ Documents
+
+Document
+
+💬 AI Assistant
+```
+
+Use collapsible panels.
+
+The document must remain readable.
+
+---
+
+# 38. PERFORMANCE
+
+DOCX files and reference images can be large.
+
+Do not repeatedly parse files.
+
+Use:
+
+```text
+DOCX
+ ↓
+Parse once
+ ↓
+Normalized JSON
+ ↓
+Cache
+ ↓
+React renderer
+```
+
+Similarly:
+
+```text
+knowledge.xlsx
+ ↓
+Parse once
+ ↓
+Normalized JSON
+ ↓
+Cache
+```
+
+Reference images should be loaded lazily when required.
+
+Do not load every reference image at application startup unnecessarily.
+
+---
+
+# 39. DATA MODEL
+
+Create a normalized document model:
+
+```json
+{
+  "documentId": "cybersecurity-plan",
+  "name": "Cybersecurity Plan",
+  "sections": [
+    {
+      "id": "section-001",
+      "name": "Project Name",
+      "level": 1,
+      "elements": [
+        {
+          "type": "heading",
+          "text": "Project Name"
+        },
+        {
+          "type": "paragraph",
+          "text": "..."
+        },
+        {
+          "type": "table",
+          "rows": []
+        }
+      ]
+    }
+  ]
+}
+```
+
+Knowledge model:
+
+```json
+{
+  "section": "Cybersecurity Objective",
+  "objective": "...",
+  "owner": "...",
+  "checklist": [],
+  "evidenceRequired": "..."
+}
+```
+
+Reference model:
+
+```json
+{
+  "section": "Cybersecurity Objective",
+  "image": "/Reference-image/Cybersecurity Objective.png",
+  "available": true
+}
+```
+
+---
+
+# 40. DOCUMENT SECTION IDENTIFICATION
+
+Use the DOCX structure to identify headings.
+
+Support:
+
+- Heading 1
+- Heading 2
+- Heading 3
+- Heading 4
+- Numbered headings
+- Custom heading styles where possible
+
+Represent hierarchy in the navigation.
+
+Example:
+
+```text
+▾ 5 Scope
+
+   5.1 System Scope
+   5.2 Organizational Scope
+```
+
+---
+
+# 41. EXCEL SECTION MATCHING
+
+Normalize names before matching.
+
+For example:
+
+```text
+Cybersecurity Objective
+CYBERSECURITY OBJECTIVE
+Cybersecurity Objective
+```
+
+should be treated consistently.
+
+Normalization should handle:
+
+- Case
+- Leading/trailing spaces
+- Multiple spaces
+- Minor punctuation differences
+
+Do not use aggressive fuzzy matching without logging or indicating the match.
+
+---
+
+# 42. ERROR HANDLING
+
+If the DOCX cannot be parsed:
+
+```text
+Unable to load the Cybersecurity Plan template.
+
+Please verify the DOCX file.
+```
+
+If Excel cannot be loaded:
+
+```text
+Knowledge information is currently unavailable.
+```
+
+The document should still remain viewable.
+
+If a reference image cannot be loaded:
+
+```text
+Reference input image is unavailable.
+```
+
+Do not crash the application.
+
+---
+
+# 43. SECURITY
+
+Because this is an automotive cybersecurity engineering platform:
+
+- Validate uploaded DOCX files.
+- Validate Excel files.
+- Validate image files.
+- Do not execute macros.
+- Sanitize imported content.
+- Validate API requests.
+- Keep future AI credentials server-side.
+- Never expose Llama credentials in frontend code.
+- Use environment variables.
+- Configure CORS correctly.
+- Prevent arbitrary file execution.
+
+---
+
+# 44. RECOMMENDED TECHNOLOGY
+
+## Frontend
+
+```text
+React
+TypeScript
+Vite
+Tailwind CSS
+Framer Motion
+Lucide React
+```
+
+## Backend
+
+```text
+Python
+FastAPI
+python-docx
+openpyxl
+Pillow
+```
+
+Optional future:
+
+```text
+Llama
+RAG
+Vector Database
+PostgreSQL
+```
+
+---
+
+# 45. PROJECT STRUCTURE
+
+Use a maintainable architecture:
+
+```text
+know-how/
+│
+├── frontend/
+│   └── src/
+│       ├── components/
+│       │   ├── layout/
+│       │   │   ├── Header.tsx
+│       │   │   ├── DocumentSidebar.tsx
+│       │   │   └── AIChatPanel.tsx
+│       │   │
+│       │   ├── document/
+│       │   │   ├── DocumentViewer.tsx
+│       │   │   ├── DocumentSection.tsx
+│       │   │   ├── ParagraphRenderer.tsx
+│       │   │   ├── TableRenderer.tsx
+│       │   │   └── ReferenceImageContainer.tsx
+│       │   │
+│       │   ├── navigation/
+│       │   │   ├── DocumentNavigation.tsx
+│       │   │   └── SectionNavigation.tsx
+│       │   │
+│       │   └── guidance/
+│       │       ├── SectionPopup.tsx
+│       │       ├── ImportantNotes.tsx
+│       │       └── TypewriterText.tsx
+│       │
+│       ├── services/
+│       │   ├── documentService.ts
+│       │   ├── knowledgeService.ts
+│       │   ├── referenceService.ts
+│       │   └── aiService.ts
+│       │
+│       ├── types/
+│       └── pages/
+│           └── KnowHow.tsx
+│
+├── backend/
+│   └── app/
+│       ├── main.py
+│       ├── routes/
+│       │   ├── documents.py
+│       │   ├── knowledge.py
+│       │   └── ai.py
+│       │
+│       ├── services/
+│       │   ├── docx_parser.py
+│       │   ├── document_renderer.py
+│       │   ├── excel_parser.py
+│       │   ├── reference_image_service.py
+│       │   └── ai_service.py
+│       │
+│       └── schemas/
+│
+├── documents/
+│   └── cybersecurity-plan/
+│       ├── template.docx
+│       ├── knowledge.xlsx
+│       └── Reference-image/
+│
+└── README.md
+```
+
+---
+
+# 46. DEVELOPMENT PHASES
+
+Implement in the following order.
+
+## Phase 1 — Input analysis
+
+Before coding, inspect:
+
+```text
+template.docx
+knowledge.xlsx
+Reference-image/
+```
+
+Generate an internal analysis of:
+
+- DOCX sections
+- Heading hierarchy
+- Tables
+- Formatting
+- Excel columns
+- Excel section names
+- Reference image names
+
+---
+
+## Phase 2 — Document rendering
+
+Implement:
+
+```text
+DOCX → normalized document model → React renderer
+```
+
+Ensure the first page is rendered correctly.
+
+---
+
+## Phase 3 — Navigation
+
+Implement:
+
+```text
+Document
+ ↓
+Section list
+ ↓
+Section selection
+ ↓
+Smooth scroll
+```
+
+---
+
+## Phase 4 — Excel guidance
+
+Implement:
+
+```text
+Section
+ ↓
+knowledge.xlsx
+ ↓
+Objective
+Owner
+Checklist
+```
+
+---
+
+## Phase 5 — Reference images
+
+Implement:
+
+```text
+Section
+ ↓
+Reference-image/
+ ↓
+Scrollable reference image
+```
+
+---
+
+## Phase 6 — Section interaction
+
+Implement:
+
+- Popup
+- Expand container
+- Independent close buttons
+- Toggle behavior
+- Source availability matrix
+
+---
+
+## Phase 7 — Important Notes
+
+Implement:
+
+- First navigation item
+- knowledge.xlsx first five rows
+- Typewriter animation
+
+---
+
+## Phase 8 — AI interface
+
+Implement:
+
+- Right-side AI panel
+- "Coming Soon" state
+- Future-ready API abstraction
+
+---
+
+# 47. ACCEPTANCE TESTS
+
+### TEST 1
+
+User opens KNOW HOW.
+
+Expected:
+
+```text
+Cybersecurity Documents
+Cybersecurity Plan
+```
+
+is visible.
+
+### TEST 2
+
+User selects:
+
+```text
+Cybersecurity Plan
+```
+
+Expected:
+
+The left navigation shows sections beginning with:
+
+```text
+Important Notes
+Project Name
+Document Information
+Revision History
+Purpose
+Scope
+Audience
+Related Documents
+...
+```
+
+### TEST 3
+
+User selects:
+
+```text
+Project Name
+```
+
+Expected:
+
+- Center document scrolls to Project Name.
+- Popup opens.
+- Reference image opens if available.
+
+### TEST 4
+
+User selects:
+
+```text
+Cybersecurity Objective
+```
+
+Expected:
+
+- Center document scrolls to section.
+- Section heading is visible.
+- Full section content is visible.
+- Tables are accurately rendered.
+- Excel popup opens.
+- Reference image opens if available.
+
+### TEST 5
+
+User selects a section existing in Excel but not in Reference-image.
+
+Expected:
+
+```text
+Popup:
+Excel content
+
+Reference:
+There is no update in this section,
+so reference input is not available.
+```
+
+### TEST 6
+
+User selects a section existing in Reference-image but not Excel.
+
+Expected:
+
+```text
+Popup:
+No major update, please follow the reference input image.
+
+Reference:
+Image displayed.
+```
+
+### TEST 7
+
+User selects a section existing in neither source.
+
+Expected:
+
+```text
+Popup:
+No major update.
+
+Reference:
+Reference input not available for this section.
+```
+
+### TEST 8
+
+User clicks the selected section again.
+
+Expected:
+
+```text
+Popup closes
+Reference container closes
+```
+
+### TEST 9
+
+User clicks popup close button.
+
+Expected:
+
+```text
+Popup closes.
+Reference container remains open.
+```
+
+### TEST 10
+
+User clicks reference close button.
+
+Expected:
+
+```text
+Reference container closes.
+Popup remains open.
+```
+
+### TEST 11
+
+User selects:
+
+```text
+Important Notes
+```
+
+Expected:
+
+Knowledge.xlsx first five rows are displayed with a typewriter animation.
+
+### TEST 12
+
+User asks AI:
+
+> What should I update in Revision History?
+
+Expected:
+
+The UI indicates that AI functionality is:
+
+```text
+In Progress
+Will be enabled soon
+```
+
+The system must not falsely claim that an AI answer was generated.
+
+---
+
+# 48. MOST IMPORTANT ARCHITECTURAL RULE
+
+The application has four independent information layers:
+
+```text
+┌─────────────────────────────────────────┐
+│              KNOW HOW                   │
+├─────────────────────────────────────────┤
+│                                         │
+│  TEMPLATE DOCX                          │
+│  "What does the official document       │
+│   look like?"                           │
+│                                         │
+│  knowledge.xlsx                         │
+│  "What guidance/update information      │
+│   is available?"                        │
+│                                         │
+│  Reference-image/                       │
+│  "What does the reference input         │
+│   look like?"                           │
+│                                         │
+│  AI Assistant                           │
+│  "How can I understand/update it?"     │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+The source responsibilities are:
+
+```text
+DOCX
+→ Main document appearance/content
+
+knowledge.xlsx
+→ Guidance and update information
+
+Reference-image/
+→ Visual reference examples
+
+AI
+→ Future contextual assistance
+```
+
+Do not mix these sources.
+
+---
+
+# 49. FINAL PRODUCT EXPECTATION
+
+The final KNOW HOW application must feel like a **real enterprise automotive cybersecurity engineering platform**.
+
+It should not feel like:
+
+- An Excel viewer
+- A Word converter
+- A simple document reader
+- A generic admin dashboard
+- A prototype
+
+It should feel like:
+
+> **An intelligent cybersecurity engineering workspace where the official document, engineering guidance, reference examples, and future AI assistance are connected through a single professional interface.**
+
+The visual experience should be:
+
+**Accurate + Professional + Futuristic + Enterprise + Easy to Use**
+
+Most importantly:
+
+> **Preserve the original template document visually and structurally while adding KNOW HOW's interactive intelligence around it.**
+
+Before implementing the final UI, inspect the actual input files and use their real structure rather than assuming the examples above are the exact document structure.
+
+Do not invent missing content.
+
+Do not replace document content with placeholder text when the real input exists.
+
+Do not remove tables or formatting to simplify implementation.
+
+Build the application around the actual contents of the supplied files.
